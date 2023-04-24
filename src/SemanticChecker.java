@@ -20,7 +20,7 @@ public class SemanticChecker {
           if(args.length == 0)
           args = new String[]
          {
-             "/Users/justinneigh/Downloads/Homework5_470/src/minc/simple case"
+             "C:\\Users\\Justin Neigh\\Downloads\\proj5-minic-SemanticChecker-startup\\src\\output\\output_test_01_main_fail1.txt"
          };
 
         if(args.length <= 0)

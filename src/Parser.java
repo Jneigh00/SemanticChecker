@@ -699,7 +699,7 @@ case 20:
 break;
 case 21:
 //#line 88 "Parser.y"
-{Debug("return_stmt    ->  RETURN  expr  SEMI"); yyval.obj = returnstmt____RETURN_expr_SEMI(val_peek(1).obj); }
+{Debug("return_stmt    ->  RETURN  expr  SEMI"); yyval.obj = returnstmt____RETURN_expr_SEMI(val_peek(2).obj, val_peek(1).obj); }
 break;
 case 22:
 //#line 91 "Parser.y"
@@ -799,7 +799,7 @@ case 45:
 break;
 case 46:
 //#line 124 "Parser.y"
-{Debug("if_stmt        ->  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt"); yyval.obj = if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt(val_peek(6).obj, val_peek(5).obj, val_peek(4).obj); }
+{Debug("if_stmt        ->  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt"); yyval.obj = if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt(val_peek(4).obj, val_peek(2).obj, val_peek(0).obj ); }
 break;
 case 47:
 //#line 126 "Parser.y"
@@ -811,11 +811,11 @@ case 48:
 break;
 case 49:
 //#line 129 "Parser.y"
-{Debug("param          ->  VAR  type_spec  IDENT"); yyval.obj = param____VAR_type_spec_IDENT(val_peek(2).obj, val_peek(1).obj); }
+{Debug("param          ->  VAR  type_spec  IDENT"); yyval.obj = param____VAR_type_spec_IDENT(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
 break;
 case 50:
 //#line 131 "Parser.y"
-{Debug("arg_list       ->  arg_list  COMMA  expr"); yyval.obj =arg_list____arg_list_COMMA_expr(val_peek(2).obj, val_peek(1).obj); }
+{Debug("arg_list       ->  arg_list  COMMA  expr"); yyval.obj =arg_list____arg_list_COMMA_expr(val_peek(2).obj, val_peek(0).obj); }
 break;
 case 51:
 //#line 132 "Parser.y"
@@ -823,15 +823,15 @@ case 51:
 break;
 case 52:
 //#line 134 "Parser.y"
-{Debug("print_stmt     ->  PRINT  expr  SEMI"); yyval.obj = print_stmt____PRINT_expr_SEMI(val_peek(2).obj); }
+{Debug("print_stmt     ->  PRINT  expr  SEMI"); yyval.obj = print_stmt____PRINT_expr_SEMI(val_peek(1).obj); }
 break;
 case 53:
 //#line 136 "Parser.y"
-{Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(val_peek(4).obj, val_peek(3).obj);}
+{Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(val_peek(2).obj, val_peek(0).obj);}
 break;
 case 54:
 //#line 138 "Parser.y"
-{Debug("compound_stmt  ->  BEGIN  local_decls  stmt_list  END"); yyval.obj = compound_stmt____BEGIN_localDecls_stmtList_END(val_peek(3).obj, val_peek(2).obj);}
+{Debug("compound_stmt  ->  BEGIN  local_decls  stmt_list  END"); yyval.obj = compound_stmt____BEGIN_localDecls_stmtList_END(val_peek(2).obj, val_peek(1).obj);}
 break;
 //#line 758 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########

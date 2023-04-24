@@ -25,7 +25,13 @@ public class ParserImpl
         // 2. assign the root, whose type is ParseTree.Program, to parsetree_program
         ArrayList<ParseTree.FuncDecl> decllist = (ArrayList<ParseTree.FuncDecl>)s1;
         parsetree_program = new ParseTree.Program(decllist);
-        return  parsetree_program;
+        for(int i = 0; i<decllist.size(); i++){
+            ParseTree.FuncDecl funcDecl = decllist.get(i);
+            if(funcDecl.ident.equals("main") && funcDecl.rettype.typename.equals("int") && funcDecl.params.size() ==0){
+                return  parsetree_program;
+            }
+        }
+        throw new Exception("The program must have one main function that returns int type and has no parameters.");
     }
 
     ParseTree.Program program___eps() throws Exception{
@@ -185,7 +191,7 @@ public class ParserImpl
         stmt.ident_reladdr = 1;
         return stmt;
     }
-    ParseTree.ReturnStmt returnstmt____RETURN_expr_SEMI(Object s2) throws Exception
+    ParseTree.ReturnStmt returnstmt____RETURN_expr_SEMI(Object s1, Object s2) throws Exception
     {
         // 1. check if expr.value_type matches with the current function return type
         // 2. etc.
@@ -237,8 +243,9 @@ public class ParserImpl
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
         ParseTree.ExprAdd add = new ParseTree.ExprAdd(expr1,expr2);
+        ParseTree.ExprAdd addExpr = new ParseTree.ExprAdd(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
-            ParseTree.ExprAdd addExpr = new ParseTree.ExprAdd(expr1,expr2);
+            addExpr.info = new ParseTreeInfo.ExprInfo();
             addExpr.info.primType = "int";
             return addExpr;
         }
@@ -248,8 +255,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprSub subExpr = new ParseTree.ExprSub(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
-            ParseTree.ExprSub subExpr = new ParseTree.ExprSub(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "int";
             return subExpr;
         }
@@ -265,8 +273,9 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
+        ParseTree.ExprEq subExpr = new ParseTree.ExprEq(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
-            ParseTree.ExprEq subExpr = new ParseTree.ExprEq(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "int";
             return subExpr;
         }
@@ -276,8 +285,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprMul subExpr = new ParseTree.ExprMul(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
-            ParseTree.ExprMul subExpr = new ParseTree.ExprMul(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "int";
             return subExpr;
         }
@@ -287,8 +297,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprDiv subExpr = new ParseTree.ExprDiv(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
-            ParseTree.ExprDiv subExpr = new ParseTree.ExprDiv(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "int";
             return subExpr;
         }
@@ -298,8 +309,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprMod subExpr = new ParseTree.ExprMod(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
-            ParseTree.ExprMod subExpr = new ParseTree.ExprMod(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "int";
             return subExpr;
         }
@@ -310,8 +322,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprNe subExpr = new ParseTree.ExprNe(expr1,expr2);
         if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
-            ParseTree.ExprNe subExpr = new ParseTree.ExprNe(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
         }
@@ -321,8 +334,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprLe subExpr = new ParseTree.ExprLe(expr1,expr2);
         if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
-            ParseTree.ExprLe subExpr = new ParseTree.ExprLe(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
         }
@@ -332,8 +346,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprLt subExpr = new ParseTree.ExprLt(expr1,expr2);
         if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
-            ParseTree.ExprLt subExpr = new ParseTree.ExprLt(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
         }
@@ -343,8 +358,10 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprGe subExpr = new ParseTree.ExprGe(expr1,expr2);
         if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
-            ParseTree.ExprGe subExpr = new ParseTree.ExprGe(expr1,expr2);
+
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
         }
@@ -354,8 +371,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprGt subExpr = new ParseTree.ExprGt(expr1,expr2);
         if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
-            ParseTree.ExprGt subExpr = new ParseTree.ExprGt(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
         }
@@ -365,8 +383,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprAnd andExpr = new ParseTree.ExprAnd(expr1,expr2);
         if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
-            ParseTree.ExprAnd andExpr = new ParseTree.ExprAnd(expr1,expr2);
+            andExpr.info = new ParseTreeInfo.ExprInfo();
             andExpr.info.primType = "bool";
             return andExpr;
         }
@@ -376,8 +395,9 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
+        ParseTree.ExprOr subExpr = new ParseTree.ExprOr(expr1,expr2);
         if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
-            ParseTree.ExprOr subExpr = new ParseTree.ExprOr(expr1,expr2);
+            subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
         }
@@ -394,7 +414,10 @@ public class ParserImpl
         Token          lparen = (Token         )s1;
         ParseTree.Expr expr   = (ParseTree.Expr)s2;
         Token          rparen = (Token         )s3;
-        return new ParseTree.ExprParen(expr);
+        ParseTree.ExprParen exprParen = new ParseTree.ExprParen(expr);
+        exprParen.info.primType = expr.info.primType;
+        return exprParen;
+
     }
     ParseTree.ExprIdent expr____IDENT(Object s1) throws Exception
     {
@@ -403,10 +426,14 @@ public class ParserImpl
         // 3. etc.
         // 4. create and return node that has the value_type of the id.lexeme
         Token id = (Token)s1;
-        if(env.Get(id.lexeme) != null){
-
-        }
         ParseTree.ExprIdent expr = new ParseTree.ExprIdent(id.lexeme);
+        expr.info.name = id.lexeme;
+        if(env.Get(id.lexeme) != null){
+            ParseTree.Expr temp = (ParseTree.Expr) env.Get(id.lexeme);
+            if(temp.info.name == expr.info.name){
+                return expr;
+            }
+        }
         expr.reladdr = 1;
         return expr;
     }
@@ -451,10 +478,10 @@ public class ParserImpl
     }
 
 
-    ParseTree.IfStmt if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt(Object s1, Object s2, Object s3) throws Exception{
-        ParseTree.Expr cond = (ParseTree.Expr) s1;
-        ParseTree.Stmt thenStmt = (ParseTree.Stmt) s2;
-        ParseTree.Stmt elseStmt = (ParseTree.Stmt) s3;
+    ParseTree.IfStmt if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt(Object s3, Object s5, Object s7) throws Exception{
+        ParseTree.Expr cond = (ParseTree.Expr) s3;
+        ParseTree.Stmt thenStmt = (ParseTree.Stmt) s5;
+        ParseTree.Stmt elseStmt = (ParseTree.Stmt) s7;
         return new ParseTree.IfStmt(cond, thenStmt, elseStmt);
     }
 
@@ -478,8 +505,8 @@ public class ParserImpl
         return new ParseTree.Param(ident1, typeSpec1);
     }
 
-    ArrayList<ParseTree.Arg> arg_list____arg_list_COMMA_expr(Object s1, Object s2) throws Exception{
-        ParseTree.Expr expr1 = (ParseTree.Expr) s2;
+    ArrayList<ParseTree.Arg> arg_list____arg_list_COMMA_expr(Object s1, Object s3) throws Exception{
+        ParseTree.Expr expr1 = (ParseTree.Expr) s3;
         ArrayList<ParseTree.Arg> argList1 = (ArrayList) s1;
         argList1.add(new ParseTree.Arg(expr1));
         return null;
@@ -496,14 +523,14 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         return new ParseTree.PrintStmt(expr1);
     }
-    ParseTree.WhileStmt while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(Object s1, Object s2) throws Exception{
-        ParseTree.Expr expr1 = (ParseTree.Expr) s1;
-        ParseTree.Stmt stmt1 = (ParseTree.Stmt) s2;
+    ParseTree.WhileStmt while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(Object s3, Object s5) throws Exception{
+        ParseTree.Expr expr1 = (ParseTree.Expr) s3;
+        ParseTree.Stmt stmt1 = (ParseTree.Stmt) s5;
         return new ParseTree.WhileStmt(expr1, stmt1);
     }
-    ParseTree.CompoundStmt compound_stmt____BEGIN_localDecls_stmtList_END(Object s1, Object s2){
-        ArrayList<ParseTree.LocalDecl> localDecls1 = (ArrayList<ParseTree.LocalDecl>) s1;
-        ArrayList<ParseTree.Stmt> stmtList1 = (ArrayList<ParseTree.Stmt>) s2;
+    ParseTree.CompoundStmt compound_stmt____BEGIN_localDecls_stmtList_END(Object s2, Object s3){
+        ArrayList<ParseTree.LocalDecl> localDecls1 = (ArrayList<ParseTree.LocalDecl>) s2;
+        ArrayList<ParseTree.Stmt> stmtList1 = (ArrayList<ParseTree.Stmt>) s3;
         return new ParseTree.CompoundStmt(localDecls1, stmtList1);
     }
 
