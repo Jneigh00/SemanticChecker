@@ -1,0 +1,1 @@
+I did not work with anyone for this assignment. The only thing needed to run is to set the file path for the test cases in SemanticChecker.java
