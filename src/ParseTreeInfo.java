@@ -32,5 +32,7 @@ public class ParseTreeInfo
     }
     public static class ExprInfo
     {
+        String primType;
+        String retType;
     }
 }

@@ -237,8 +237,10 @@ public class ParserImpl
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
         ParseTree.ExprAdd add = new ParseTree.ExprAdd(expr1,expr2);
-        if(expr1.getClass().equals(expr2.getClass())){
-         return add;
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
+            ParseTree.ExprAdd addExpr = new ParseTree.ExprAdd(expr1,expr2);
+            addExpr.info.primType = "int";
+            return addExpr;
         }
         throw new Exception( "sematic error in exprADD");
     }
@@ -246,8 +248,11 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprSub(expr1, expr2);
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
+            ParseTree.ExprSub subExpr = new ParseTree.ExprSub(expr1,expr2);
+            subExpr.info.primType = "int";
+            return subExpr;
+        }
         throw new Exception("Semantic Error in exprSUB");
     }
 
@@ -260,32 +265,44 @@ public class ParserImpl
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
         // check if expr1.type matches with expr2.type
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprEq(expr1,expr2);
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
+            ParseTree.ExprEq subExpr = new ParseTree.ExprEq(expr1,expr2);
+            subExpr.info.primType = "int";
+            return subExpr;
+        }
         throw new Exception("Semantic Error in exprEQ");
     }
     ParseTree.ExprMul expr____expr_MUL_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprMul(expr1, expr2);
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
+            ParseTree.ExprMul subExpr = new ParseTree.ExprMul(expr1,expr2);
+            subExpr.info.primType = "int";
+            return subExpr;
+        }
         throw new Exception("semantic Error in ExprMult");
     }
     ParseTree.ExprDiv expr____expr_DIV_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprDiv(expr1, expr2);
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
+            ParseTree.ExprDiv subExpr = new ParseTree.ExprDiv(expr1,expr2);
+            subExpr.info.primType = "int";
+            return subExpr;
+        }
         throw new Exception("semantic Error in DIV");
     }
     ParseTree.ExprMod expr____expr_MOD_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprMod(expr1, expr2);
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
+            ParseTree.ExprMod subExpr = new ParseTree.ExprMod(expr1,expr2);
+            subExpr.info.primType = "int";
+            return subExpr;
+        }
         throw new Exception("semantic Error in ExprMod");
 
     }
@@ -293,56 +310,77 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprNe(expr1, expr2);
+        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+            ParseTree.ExprNe subExpr = new ParseTree.ExprNe(expr1,expr2);
+            subExpr.info.primType = "bool";
+            return subExpr;
+        }
         throw new Exception("semantic Error in ExprNE");
     }
     ParseTree.ExprLe expr____expr_LE_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprLe(expr1, expr2);
+        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+            ParseTree.ExprLe subExpr = new ParseTree.ExprLe(expr1,expr2);
+            subExpr.info.primType = "bool";
+            return subExpr;
+        }
         throw new Exception("semantic Error in ExprLe");
     }
     ParseTree.ExprLt expr____expr_LT_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprLt(expr1, expr2);
+        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+            ParseTree.ExprLt subExpr = new ParseTree.ExprLt(expr1,expr2);
+            subExpr.info.primType = "bool";
+            return subExpr;
+        }
         throw new Exception("semantic Error in ExprLt");
     }
     ParseTree.ExprGe expr____expr_GE_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprGe(expr1, expr2);
+        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+            ParseTree.ExprGe subExpr = new ParseTree.ExprGe(expr1,expr2);
+            subExpr.info.primType = "bool";
+            return subExpr;
+        }
         throw new Exception("semantic Error in ExprGE");
     }
     ParseTree.ExprGt expr____expr_GT_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprGt(expr1, expr2);
+        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+            ParseTree.ExprGt subExpr = new ParseTree.ExprGt(expr1,expr2);
+            subExpr.info.primType = "bool";
+            return subExpr;
+        }
         throw new Exception("semantic Error in ExprGt");
     }
     ParseTree.ExprAnd expr____expr_AND_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprAnd(expr1, expr2);
+        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+            ParseTree.ExprAnd andExpr = new ParseTree.ExprAnd(expr1,expr2);
+            andExpr.info.primType = "bool";
+            return andExpr;
+        }
         throw new Exception("semantic Error in ExprAmd");
     }
     ParseTree.ExprOr expr____expr_OR_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
-        if(expr1.getClass().equals(expr2.getClass()))
-            return new ParseTree.ExprOr(expr1, expr2);
+        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+            ParseTree.ExprOr subExpr = new ParseTree.ExprOr(expr1,expr2);
+            subExpr.info.primType = "bool";
+            return subExpr;
+        }
         throw new Exception("semantic Error in ExprOr");
     }
     ParseTree.ExprNot expr____NOT_expr(Object s1, Object s2) throws Exception{
@@ -365,6 +403,9 @@ public class ParserImpl
         // 3. etc.
         // 4. create and return node that has the value_type of the id.lexeme
         Token id = (Token)s1;
+        if(env.Get(id.lexeme) != null){
+
+        }
         ParseTree.ExprIdent expr = new ParseTree.ExprIdent(id.lexeme);
         expr.reladdr = 1;
         return expr;
@@ -374,12 +415,16 @@ public class ParserImpl
         // 1. create and return node that has int type
         Token token = (Token)s1;
         int value = Integer.parseInt(token.lexeme);
-        return new ParseTree.ExprIntLit(value);
+        ParseTree.ExprIntLit intExpr = new ParseTree.ExprIntLit(value);
+        intExpr.info.primType = "int";
+        return intExpr;
     }
     ParseTree.ExprBoolLit expr____BOOL_LIT(Object s1) throws Exception{
         Token token = (Token) s1;
         boolean bolVal = Boolean.parseBoolean(token.lexeme);
-        return new ParseTree.ExprBoolLit(bolVal);
+        ParseTree.ExprBoolLit boolExpr = new ParseTree.ExprBoolLit(bolVal);
+        boolExpr.info.primType = "bool";
+        return boolExpr;
     }
     ParseTree.ExprCall expr____CALL_IDENT_LPAREN_args_RPAREN(Object s2, Object s4) throws Exception
     {
@@ -427,8 +472,8 @@ public class ParserImpl
         return paramList1;
     }
 
-    ParseTree.Param param____VAR_type_spec_IDENT(Object s1, Object s2) throws Exception{
-        String ident1 = (String) s1;
+    ParseTree.Param param____VAR_type_spec_IDENT(Object s1, Object s2, Object s3) throws Exception{
+        String ident1 = (String) s3;
         ParseTree.TypeSpec typeSpec1 = (ParseTree.TypeSpec) s2;
         return new ParseTree.Param(ident1, typeSpec1);
     }

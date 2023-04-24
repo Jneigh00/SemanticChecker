@@ -126,7 +126,7 @@ if_stmt         :  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt   {Debug("if_stmt 
 param_list      :  param_list  COMMA  param   {Debug("param_list     -> param_list  COMMA  param "); $$ = param_list____param_list_COMMA_param($1, $2, $3);}
                 |  param                      {Debug("param_list     -> param"); $$ = param_list____param($1); };
 
-param          : VAR  type_spec  IDENT        {Debug("param          ->  VAR  type_spec  IDENT"); $$ = param____VAR_type_spec_IDENT($1, $2); };
+param          : VAR  type_spec  IDENT        {Debug("param          ->  VAR  type_spec  IDENT"); $$ = param____VAR_type_spec_IDENT($1, $2, $3); };
 
 arg_list       :  arg_list  COMMA  expr       {Debug("arg_list       ->  arg_list  COMMA  expr"); $$ =arg_list____arg_list_COMMA_expr($1, $2); }
                |  expr                  {Debug("arg_list       ->       expr"); $$ = arg_list____expr($1);};
