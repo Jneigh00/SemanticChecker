@@ -35,5 +35,6 @@ public class ParseTreeInfo
         String name;
         String primType;
         String retType;
+        String value;
     }
 }

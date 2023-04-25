@@ -18,7 +18,7 @@ public class ParserImpl
     Env env = new Env(null);
     // this stores the root of parse tree, which will be used to print parse tree and run the parse tree
     ParseTree.Program parsetree_program = null;
-
+    String retType = "";
     ParseTree.Program program____decllist(Object s1) throws Exception
     {
         // 1. check if decllist has main function having no parameters and returns int type
@@ -82,20 +82,15 @@ public class ParserImpl
         String name = token.lexeme.toString();
         ParseTree.TypeSpec retType = (ParseTree.TypeSpec) s7;
         ArrayList<ParseTree.Param> params = (ArrayList<ParseTree.Param>) s4;
-        ArrayList<ParseTree.Stmt> stmts = (ArrayList<ParseTree.Stmt>) s9;
-        ParseTreeInfo.FuncDeclInfo newInfo = new ParseTreeInfo.FuncDeclInfo();
-        newInfo.name = name;
-        newInfo.returnType = retType;
-        newInfo.params = params;
-
-        Object id_type = env.Get(token.lexeme);
-
+        ArrayList<ParseTree.LocalDecl> localdecls = (ArrayList<ParseTree.LocalDecl>) s9;
         // 2. create a new symbol table on top of env
-        Env newTop = new Env(this.env);
+        env = new Env(env);
         // 3. add parameters into top-local scope of env
-        newTop.Put(newInfo.name, newInfo);
+        for(int i = 0; i < localdecls.size(); i++){
+            env.Put(localdecls.get(i).ident, localdecls.get(i).typespec.typename);
+        }
+        Object id_type = env.Get(token.lexeme);
         // 4. etc.
-
 
         return null;
     }
@@ -197,6 +192,7 @@ public class ParserImpl
         // 2. etc.
         // 3. create and return node
         ParseTree.Expr expr = (ParseTree.Expr)s2;
+
         return new ParseTree.ReturnStmt(expr);
     }
 
@@ -241,14 +237,15 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr)s1;
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
+        System.out.println(expr1.info.name + " HERE");
         // check if expr1.type matches with expr2.type
-        ParseTree.ExprAdd add = new ParseTree.ExprAdd(expr1,expr2);
         ParseTree.ExprAdd addExpr = new ParseTree.ExprAdd(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
             addExpr.info = new ParseTreeInfo.ExprInfo();
             addExpr.info.primType = "int";
             return addExpr;
         }
+
         throw new Exception( "sematic error in exprADD");
     }
     ParseTree.ExprSub expr____expr_SUB_expr(Object s1, Object s2, Object s3) throws Exception{
@@ -269,6 +266,7 @@ public class ParserImpl
         // 1. check if expr1.value_type matches with the expr2.value_type
         // 2. etc.
         // 3. create and return node that has value_type
+
         ParseTree.Expr expr1 = (ParseTree.Expr)s1;
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
@@ -426,14 +424,13 @@ public class ParserImpl
         // 3. etc.
         // 4. create and return node that has the value_type of the id.lexeme
         Token id = (Token)s1;
-        ParseTree.ExprIdent expr = new ParseTree.ExprIdent(id.lexeme);
-        expr.info.name = id.lexeme;
-        if(env.Get(id.lexeme) != null){
-            ParseTree.Expr temp = (ParseTree.Expr) env.Get(id.lexeme);
-            if(temp.info.name == expr.info.name){
-                return expr;
-            }
+
+        if(env.Get(id.lexeme) == null){
+                throw new Exception("Ident is not in the symbol table");
         }
+        ParseTree.ExprIdent expr = new ParseTree.ExprIdent(id.lexeme);
+        expr.info = new ParseTreeInfo.ExprInfo();
+        expr.info.name = id.lexeme;
         expr.reladdr = 1;
         return expr;
     }
@@ -444,6 +441,7 @@ public class ParserImpl
         int value = Integer.parseInt(token.lexeme);
         ParseTree.ExprIntLit intExpr = new ParseTree.ExprIntLit(value);
         intExpr.info.primType = "int";
+        intExpr.info.value = Integer.toString(value);
         return intExpr;
     }
     ParseTree.ExprBoolLit expr____BOOL_LIT(Object s1) throws Exception{
@@ -451,6 +449,7 @@ public class ParserImpl
         boolean bolVal = Boolean.parseBoolean(token.lexeme);
         ParseTree.ExprBoolLit boolExpr = new ParseTree.ExprBoolLit(bolVal);
         boolExpr.info.primType = "bool";
+        boolExpr.info.value = Boolean.toString(bolVal);
         return boolExpr;
     }
     ParseTree.ExprCall expr____CALL_IDENT_LPAREN_args_RPAREN(Object s2, Object s4) throws Exception
