@@ -1,4 +1,3 @@
-
 public class Compiler {
     Parser parser;
     public Compiler(java.io.Reader r)
@@ -38,7 +37,7 @@ public class Compiler {
             System.out.println("================================================================================");
             System.out.println("Code with indentations:");
             for (String line : lines)
-               System.out.println(line);
+                System.out.println(line);
         }
         catch(Exception e)
         {

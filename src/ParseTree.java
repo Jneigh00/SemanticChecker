@@ -49,7 +49,7 @@ public class ParseTree
         public Stack<StackFrame>            stackframes;        // stack frame list (stack of function call)
         public HashMap<String, FuncDecl>    funcname_funcdecl;  // name -> func body/node
 
-        public RunEnv(ArrayList<ParseTree.FuncDecl> funcs)
+        public RunEnv(ArrayList<FuncDecl> funcs)
         {
             // create calling stack environment
             stackframes = new Stack<StackFrame>();
@@ -103,7 +103,7 @@ public class ParseTree
         }
         public Object Exec() throws Exception
         {
-            ParseTree.RunEnv runenv = new ParseTree.RunEnv(funcs);  // prepare running environment
+            RunEnv runenv = new RunEnv(funcs);  // prepare running environment
             FuncDecl main = runenv.funcname_funcdecl.get("main");   // find main function
             Object ret = main.Exec(runenv, new Object[0]);          // run the main function
             return ret;                                             // return value

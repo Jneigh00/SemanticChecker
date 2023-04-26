@@ -9,6 +9,8 @@ public class ParseTreeInfo
     public static class TypeSpecInfo
     {
         ArrayList<ParseTree.Param> params;
+        public String returnType;
+        public String name;
     }
     public static class ProgramInfo
     {

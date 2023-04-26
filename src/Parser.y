@@ -135,7 +135,9 @@ print_stmt     : PRINT  expr  SEMI      {Debug("print_stmt     ->  PRINT  expr  
 
 while_stmt     : WHILE  LPAREN  expr  RPAREN  stmt {Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); $$ = while_stmt____WHILE_LPAREN_expr_RPAREN_stmt($3, $5);};
 
-compound_stmt: BEGIN local_decls stmt_list END      {Debug("compound_stmt  ->  BEGIN  local_decls  stmt_list  END"); $$ = compound_stmt____BEGIN_localDecls_stmtList_END($2, $3);} ;
+compound_stmt: BEGIN local_decls    { $$ = compound_stmt____BEGIN_localDecls_stmtList_End($1,$2)}
+                stmt_list END       {Debug("compound_stmt  ->  BEGIN  local_decls  stmt_list  END"); $$ = compound_stmt____BEGIN_localDecls_stmtList_End($1,$2);}
+                ;
 
 %%
     private Lexer lexer;
