@@ -23,6 +23,7 @@ public class Compiler {
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             System.out.println("Error: there is semantic error(s).");
             if(e != null && e.getMessage() != null)
                 System.out.println(e.getMessage());
@@ -41,6 +42,7 @@ public class Compiler {
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             System.out.println("================================================================================");
             System.out.print("Fail in printing parse tree.");
             if(e != null && e.getMessage() != null)
@@ -60,6 +62,7 @@ public class Compiler {
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             System.out.println("================================================================================");
             System.out.print("Fail in printing parse tree with comments.");
             if(e != null && e.getMessage() != null)
@@ -78,6 +81,7 @@ public class Compiler {
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             System.out.println("================================================================================");
             System.out.print("Fail in executing parse tree.");
             if(e != null && e.getMessage() != null)

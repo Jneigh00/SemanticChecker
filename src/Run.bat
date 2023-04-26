@@ -3,7 +3,6 @@ yacc.exe -Jthrows="Exception" -Jextends=ParserImpl -Jclass=Parser -Jnorun -J Par
 
 javac *.java
 
-java TestEnv
 
 java  SemanticChecker    ..\minc\syntaxerr_01_main.minc          > ..\myoutput\output_syntaxerr_01_main.txt
 java  SemanticChecker    ..\minc\syntaxerr_02_expr1.minc         > ..\myoutput\output_syntaxerr_02_expr1.txt

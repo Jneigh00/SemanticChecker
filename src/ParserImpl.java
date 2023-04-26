@@ -79,17 +79,22 @@ public class ParserImpl
     {
         // 1. add function_type_info object (name, return type, params) into the global scope of env
         Token token = (Token) s2;
-        String name = token.lexeme.toString();
+        String name = token.lexeme;
         ParseTree.TypeSpec retType = (ParseTree.TypeSpec) s7;
         ArrayList<ParseTree.Param> params = (ArrayList<ParseTree.Param>) s4;
         ArrayList<ParseTree.LocalDecl> localdecls = (ArrayList<ParseTree.LocalDecl>) s9;
+        ParseTree.TypeSpec tempStore = new ParseTree.TypeSpec(token.lexeme);
+        env.Put(name, tempStore);
+
         // 2. create a new symbol table on top of env
         env = new Env(env);
         // 3. add parameters into top-local scope of env
-        for(int i = 0; i < localdecls.size(); i++){
-            env.Put(localdecls.get(i).ident, localdecls.get(i).typespec.typename);
+        for(int i = 0; i < params.size(); i++){
+            ParseTree.TypeSpec temp = new ParseTree.TypeSpec( params.get(i).typespec.typename);
+            env.Put(params.get(i).ident, temp);
         }
         Object id_type = env.Get(token.lexeme);
+
         // 4. etc.
 
         return null;
@@ -129,12 +134,12 @@ public class ParserImpl
         return new ArrayList<ParseTree.Stmt>();
     }
 
-    ParseTree.Stmt stmt____assignstmt  (Object s1) throws Exception
+    ParseTree.Stmt stmt____assign_stmt  (Object s1) throws Exception
     {
         assert(s1 instanceof ParseTree.AssignStmt);
         return (ParseTree.Stmt)s1;
     }
-    ParseTree.Stmt stmt____returnstmt  (Object s1) throws Exception
+    ParseTree.Stmt stmt____return_stmt(Object s1) throws Exception
     {
         assert(s1 instanceof ParseTree.ReturnStmt);
         return (ParseTree.Stmt)s1;
@@ -166,27 +171,19 @@ public class ParserImpl
         Token          assign = (Token         )s2;
         ParseTree.Expr expr   = (ParseTree.Expr)s3;
         Object id_type = env.Get(id.lexeme);
-        {
-            // check if expr.type matches with id_type
-            if(id_type.equals("int")
-                && (expr instanceof ParseTree.ExprIntLit)
-                )
-                {} // ok
-            else if(id_type.equals("int")
-                && (expr instanceof ParseTree.ExprCall)
-                && (env.Get(((ParseTree.ExprCall)expr).ident).equals("func()->int"))
-                )
-            {} // ok
-            else
-            {
-                throw new Exception("semantic error");
-            }
-        }
-        ParseTree.AssignStmt stmt = new ParseTree.AssignStmt(id.lexeme, expr);
-        stmt.ident_reladdr = 1;
-        return stmt;
+       if(expr.info.primType.equals("int") && id_type.equals("int")){
+           ParseTree.AssignStmt stmt = new ParseTree.AssignStmt(id.lexeme, expr);
+           stmt.ident_reladdr = 1;
+           return stmt;
+       }
+       if(expr.info.primType.equals("bool") && id_type.equals("bool")){
+           ParseTree.AssignStmt stmt = new ParseTree.AssignStmt(id.lexeme, expr);
+           stmt.ident_reladdr = 1;
+           return stmt;
+       }
+        throw new Exception("Error in assignstmt");
     }
-    ParseTree.ReturnStmt returnstmt____RETURN_expr_SEMI(Object s1, Object s2) throws Exception
+    ParseTree.ReturnStmt returnstmt____RETURN_expr_SEMI(Object s2) throws Exception
     {
         // 1. check if expr.value_type matches with the current function return type
         // 2. etc.
@@ -214,7 +211,7 @@ public class ParserImpl
         ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s2;
         Token              id       = (Token             )s3;
         ParseTree.LocalDecl localdecl = new ParseTree.LocalDecl(id.lexeme, typespec);
-        env.Put(id.lexeme, typespec.info);
+        env.Put(id.lexeme, typespec);
         localdecl.reladdr = 1;
         return localdecl;
     }
@@ -246,7 +243,7 @@ public class ParserImpl
             return addExpr;
         }
 
-        throw new Exception( "sematic error in exprADD");
+        throw new Exception("sematic error in exprADD");
     }
     ParseTree.ExprSub expr____expr_SUB_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
@@ -274,7 +271,12 @@ public class ParserImpl
         ParseTree.ExprEq subExpr = new ParseTree.ExprEq(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
             subExpr.info = new ParseTreeInfo.ExprInfo();
-            subExpr.info.primType = "int";
+            subExpr.info.primType = "bool";
+            return subExpr;
+        }
+        if((expr1.info.primType.equals("bool")) &&(expr2.info.primType.equals("bool"))){
+            subExpr.info = new ParseTreeInfo.ExprInfo();
+            subExpr.info.primType = "bool";
             return subExpr;
         }
         throw new Exception("Semantic Error in exprEQ");
@@ -289,7 +291,7 @@ public class ParserImpl
             subExpr.info.primType = "int";
             return subExpr;
         }
-        throw new Exception("semantic Error in ExprMult");
+        throw new Exception("semantic Error in ExprMult at ");
     }
     ParseTree.ExprDiv expr____expr_DIV_expr(Object s1, Object s2, Object s3) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
@@ -321,6 +323,11 @@ public class ParserImpl
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
         ParseTree.ExprNe subExpr = new ParseTree.ExprNe(expr1,expr2);
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
+            subExpr.info = new ParseTreeInfo.ExprInfo();
+            subExpr.info.primType = "bool";
+            return subExpr;
+        }
         if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
             subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
@@ -333,7 +340,7 @@ public class ParserImpl
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
         ParseTree.ExprLe subExpr = new ParseTree.ExprLe(expr1,expr2);
-        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
             subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
@@ -345,7 +352,7 @@ public class ParserImpl
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
         ParseTree.ExprLt subExpr = new ParseTree.ExprLt(expr1,expr2);
-        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
             subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
@@ -357,8 +364,7 @@ public class ParserImpl
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
         ParseTree.ExprGe subExpr = new ParseTree.ExprGe(expr1,expr2);
-        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
-
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
             subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
@@ -370,7 +376,7 @@ public class ParserImpl
         Token oper = (Token) s2;
         ParseTree.Expr expr2 =(ParseTree.Expr) s3;
         ParseTree.ExprGt subExpr = new ParseTree.ExprGt(expr1,expr2);
-        if((expr1.info.primType.equals("bool")) && (expr2.info.primType.equals("bool"))){
+        if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
             subExpr.info = new ParseTreeInfo.ExprInfo();
             subExpr.info.primType = "bool";
             return subExpr;
@@ -402,9 +408,11 @@ public class ParserImpl
         throw new Exception("semantic Error in ExprOr");
     }
     ParseTree.ExprNot expr____NOT_expr(Object s1, Object s2) throws Exception{
-        ParseTree.Expr expr1 =(ParseTree.Expr) s1;
+        Token notToken = (Token) s1;
         ParseTree.Expr expr2 = (ParseTree.Expr) s2;
-        return new ParseTree.ExprNot(expr2);
+        ParseTree.ExprNot notExpr = new ParseTree.ExprNot(expr2);
+        notExpr.info.primType = "bool";
+        return notExpr;
     }
     ParseTree.ExprParen expr____LPAREN_expr_RPAREN(Object s1, Object s2, Object s3) throws Exception
     {
@@ -431,6 +439,7 @@ public class ParserImpl
         ParseTree.ExprIdent expr = new ParseTree.ExprIdent(id.lexeme);
         expr.info = new ParseTreeInfo.ExprInfo();
         expr.info.name = id.lexeme;
+        expr.info.primType = env.Get(id.lexeme).typename;
         expr.reladdr = 1;
         return expr;
     }
@@ -462,18 +471,25 @@ public class ParserImpl
         Token                    id   = (Token                   )s2;
         ArrayList<ParseTree.Arg> args = (ArrayList<ParseTree.Arg>)s4;
         Object func_attr = env.Get(id.lexeme);
-        {
-            // check if argument types match with function param types
-            if(env.Get(id.lexeme).equals("func()->int")
-                && (args.size() == 0)
-                )
-            {} // ok
-            else
-            {
-                throw new Exception("semantic error");
+        System.out.println(id.lexeme);
+        System.out.println(env.Get(id.lexeme).typename);
+        if(env.Get(id.lexeme) != null){
+            if(id.lexeme.equals(env.Get(id.lexeme))){
+                if(args.size() == env.Get(id.lexeme).info.params.size()){
+                    for(int i = 0; i<args.size(); i++){
+                        if(!(args.get(i).expr.info.primType.equals(env.Get(id.lexeme).info.params.get(i).typespec.typename))){
+                            throw new Exception("arguments do not match function declaration");
+                        }
+                    }
+                    ParseTree.ExprCall call = new ParseTree.ExprCall(id.lexeme, args);
+                    call.info.primType = env.Get(id.lexeme).typename;
+                    return call;
+                }
             }
         }
-        return new ParseTree.ExprCall(id.lexeme, args);
+        ParseTree.ExprCall call = new ParseTree.ExprCall(id.lexeme, args);
+        call.info.primType = env.Get(id.lexeme).typename;
+        return call;
     }
 
 
@@ -484,7 +500,7 @@ public class ParserImpl
         return new ParseTree.IfStmt(cond, thenStmt, elseStmt);
     }
 
-    ArrayList<ParseTree.Param> param_list____param_list_COMMA_param(Object s1, Object s2, Object s3) throws Exception{
+    ArrayList<ParseTree.Param> param_list____param_list_COMMA_param(Object s1, Object s3) throws Exception{
         ArrayList<ParseTree.Param> paramList1 = (ArrayList<ParseTree.Param>) s1;
         ParseTree.Param param1 = (ParseTree.Param) s3;
         paramList1.add(param1);
@@ -498,7 +514,7 @@ public class ParserImpl
         return paramList1;
     }
 
-    ParseTree.Param param____VAR_type_spec_IDENT(Object s1, Object s2, Object s3) throws Exception{
+    ParseTree.Param param____VAR_type_spec_IDENT (Object s2, Object s3) throws Exception{
         String ident1 = (String) s3;
         ParseTree.TypeSpec typeSpec1 = (ParseTree.TypeSpec) s2;
         return new ParseTree.Param(ident1, typeSpec1);

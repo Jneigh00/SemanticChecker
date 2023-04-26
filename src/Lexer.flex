@@ -39,42 +39,42 @@ blkcomment  = "#{"[^]*"}#"
 
 %%
 
-"func"                              { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.FUNC        ; }
-"call"                              { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.CALL        ; }
-"return"                            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1;  return Parser.RETURN      ; }
-"var"                               { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.VAR         ; }
-"if"                                { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.IF          ; }
-"ELSE"                              { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1;  return Parser.ELSE        ; }
-"{"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1;  return Parser.BEGIN       ; }
-"}"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.END         ; }
-"while"                             { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.WHILE       ; }
-"("                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.LPAREN      ; }
-")"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.RPAREN      ; }
-"int"                               { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.INT         ; }
-"bool"                              { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.BOOL        ; }
-"print"                             { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.PRINT       ; }
-"<-"                                { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.ASSIGN      ; }
-"->"                                { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.FUNCRET     ; }
-"+"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.ADD         ; }
-"-"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.SUB         ; }
-"*"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.MUL         ; }
-"/"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.DIV         ; }
-"%"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.MOD         ; }
-"and"                               { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.AND         ; }
-"or"                                { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.OR          ; }
-"not"                               { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.NOT         ; }
-"<"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.LT          ; }
-">"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.GT          ; }
-"<="                                { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.LE          ; }
-">="                                { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.GE          ; }
-"="                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.EQ          ; }
-"!="                                { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.NE          ; }
-";"                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.SEMI        ; }
-","                                 { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.COMMA       ; }
-"true"                              { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.BOOL_LIT    ; }
-"false"                             { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.BOOL_LIT    ; }
-{int}                               { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.INT_LIT     ; }
-{identifier}                        { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.IDENT       ; }
+"func"                              { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.FUNC        ; }
+"call"                              { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1));  return Parser.CALL        ; }
+"return"                            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1));  return Parser.RETURN      ; }
+"var"                               { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.VAR         ; }
+"if"                                { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.IF          ; }
+"ELSE"                              { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.ELSE        ; }
+"{"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1));  return Parser.BEGIN       ; }
+"}"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.END         ; }
+"while"                             { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.WHILE       ; }
+"("                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.LPAREN      ; }
+")"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1));return Parser.RPAREN      ; }
+"int"                               { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.INT         ; }
+"bool"                              { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.BOOL        ; }
+"print"                             { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.PRINT       ; }
+"<-"                                { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.ASSIGN      ; }
+"->"                                { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.FUNCRET     ; }
+"+"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.ADD         ; }
+"-"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.SUB         ; }
+"*"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.MUL         ; }
+"/"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.DIV         ; }
+"%"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.MOD         ; }
+"and"                               { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.AND         ; }
+"or"                                { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.OR          ; }
+"not"                               { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.NOT         ; }
+"<"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.LT          ; }
+">"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.GT          ; }
+"<="                                { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.LE          ; }
+">="                                { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.GE          ; }
+"="                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.EQ          ; }
+"!="                                { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.NE          ; }
+";"                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.SEMI        ; }
+","                                 { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.COMMA       ; }
+"true"                              { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.BOOL_LIT    ; }
+"false"                             { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.BOOL_LIT    ; }
+{int}                               { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.INT_LIT     ; }
+{identifier}                        { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.IDENT       ; }
 {linecomment}                       { /* skip */ }
 {newline}                           { lineno++; column = 1; /* skip */ }
 {whitespace}                        { column += yytext().length(); /* skip */ }

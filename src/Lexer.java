@@ -725,11 +725,11 @@ class Lexer {
             }
           case 42: break;
           case 2: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.INT_LIT     ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.INT_LIT     ;
             }
           case 43: break;
           case 3: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.IDENT       ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.IDENT       ;
             }
           case 44: break;
           case 4: 
@@ -741,59 +741,59 @@ class Lexer {
             }
           case 46: break;
           case 6: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1;  return Parser.BEGIN       ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1));  return Parser.BEGIN       ;
             }
           case 47: break;
           case 7: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.END         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.END         ;
             }
           case 48: break;
           case 8: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.LPAREN      ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.LPAREN      ;
             }
           case 49: break;
           case 9: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.RPAREN      ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1));return Parser.RPAREN      ;
             }
           case 50: break;
           case 10: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.LT          ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.LT          ;
             }
           case 51: break;
           case 11: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.SUB         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.SUB         ;
             }
           case 52: break;
           case 12: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.GT          ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.GT          ;
             }
           case 53: break;
           case 13: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.ADD         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.ADD         ;
             }
           case 54: break;
           case 14: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.MUL         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.MUL         ;
             }
           case 55: break;
           case 15: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.DIV         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.DIV         ;
             }
           case 56: break;
           case 16: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.MOD         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.MOD         ;
             }
           case 57: break;
           case 17: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.EQ          ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.EQ          ;
             }
           case 58: break;
           case 18: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.SEMI        ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.SEMI        ;
             }
           case 59: break;
           case 19: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.COMMA       ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.COMMA       ;
             }
           case 60: break;
           case 20: 
@@ -805,47 +805,47 @@ class Lexer {
             }
           case 62: break;
           case 22: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.IF          ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.IF          ;
             }
           case 63: break;
           case 23: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.OR          ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.OR          ;
             }
           case 64: break;
           case 24: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.ASSIGN      ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.ASSIGN      ;
             }
           case 65: break;
           case 25: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.LE          ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.LE          ;
             }
           case 66: break;
           case 26: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.FUNCRET     ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.FUNCRET     ;
             }
           case 67: break;
           case 27: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.GE          ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.GE          ;
             }
           case 68: break;
           case 28: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.NE          ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.NE          ;
             }
           case 69: break;
           case 29: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.NOT         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.NOT         ;
             }
           case 70: break;
           case 30: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.AND         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.AND         ;
             }
           case 71: break;
           case 31: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.VAR         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.VAR         ;
             }
           case 72: break;
           case 32: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.INT         ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.INT         ;
             }
           case 73: break;
           case 33: 
@@ -854,35 +854,35 @@ class Lexer {
             }
           case 74: break;
           case 34: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.FUNC        ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.FUNC        ;
             }
           case 75: break;
           case 35: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.CALL        ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1));  return Parser.CALL        ;
             }
           case 76: break;
           case 36: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.BOOL_LIT    ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.BOOL_LIT    ;
             }
           case 77: break;
           case 37: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1;  return Parser.ELSE        ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.ELSE        ;
             }
           case 78: break;
           case 38: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.BOOL        ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.BOOL        ;
             }
           case 79: break;
           case 39: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.WHILE       ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.WHILE       ;
             }
           case 80: break;
           case 40: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1; return Parser.PRINT       ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1)); return Parser.PRINT       ;
             }
           case 81: break;
           case 41: 
-            { parser.yylval = new ParserVal(new Token(yytext())); column=yycolumn+1;  return Parser.RETURN      ;
+            { parser.yylval = new ParserVal(new Token(yytext(), yyline + 1, yycolumn + 1));  return Parser.RETURN      ;
             }
           case 82: break;
           default:

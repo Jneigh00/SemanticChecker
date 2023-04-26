@@ -671,11 +671,11 @@ case 13:
 break;
 case 14:
 //#line 77 "Parser.y"
-{Debug("stmt ->  assign_stmt"); yyval.obj = stmt____assignstmt(val_peek(0).obj); }
+{Debug("stmt ->  assign_stmt"); yyval.obj = stmt____assign_stmt(val_peek(0).obj); }
 break;
 case 15:
 //#line 78 "Parser.y"
-{Debug("stmt ->  return_stmt"); yyval.obj = stmt____returnstmt(val_peek(0).obj); }
+{Debug("stmt ->  return_stmt"); yyval.obj = stmt____return_stmt(val_peek(0).obj); }
 break;
 case 16:
 //#line 79 "Parser.y"
@@ -699,7 +699,7 @@ case 20:
 break;
 case 21:
 //#line 88 "Parser.y"
-{Debug("return_stmt    ->  RETURN  expr  SEMI"); yyval.obj = returnstmt____RETURN_expr_SEMI(val_peek(2).obj, val_peek(1).obj); }
+{Debug("return_stmt    ->  RETURN  expr  SEMI"); yyval.obj = returnstmt____RETURN_expr_SEMI(val_peek(1).obj); }
 break;
 case 22:
 //#line 91 "Parser.y"
@@ -803,7 +803,7 @@ case 46:
 break;
 case 47:
 //#line 126 "Parser.y"
-{Debug("param_list     -> param_list  COMMA  param "); yyval.obj = param_list____param_list_COMMA_param(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj);}
+{Debug("param_list     -> param_list  COMMA  param "); yyval.obj = param_list____param_list_COMMA_param(val_peek(2).obj, val_peek(0).obj);}
 break;
 case 48:
 //#line 127 "Parser.y"
@@ -811,7 +811,7 @@ case 48:
 break;
 case 49:
 //#line 129 "Parser.y"
-{Debug("param          ->  VAR  type_spec  IDENT"); yyval.obj = param____VAR_type_spec_IDENT(val_peek(2).obj, val_peek(1).obj, val_peek(0).obj); }
+{Debug("param          ->  VAR  type_spec  IDENT"); yyval.obj = param____VAR_type_spec_IDENT(val_peek(1).obj, val_peek(0).obj); }
 break;
 case 50:
 //#line 131 "Parser.y"
@@ -827,7 +827,7 @@ case 52:
 break;
 case 53:
 //#line 136 "Parser.y"
-{Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(val_peek(2).obj, val_peek(0).obj);}
+{Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); yyval.obj = while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(val_peek(2).obj, val_peek(0).obj);}
 break;
 case 54:
 //#line 138 "Parser.y"

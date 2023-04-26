@@ -74,8 +74,8 @@ stmt_list       : stmt_list stmt                                {Debug("stmt_lis
                 |                                               {Debug("stmt_list->eps"); $$ = stmtlist____eps();}
                 ;
 
-stmt            : assign_stmt                                   {Debug("stmt ->  assign_stmt"); $$ = stmt____assignstmt($1); }
-                | return_stmt                                   {Debug("stmt ->  return_stmt"); $$ = stmt____returnstmt($1); }
+stmt            : assign_stmt                                   {Debug("stmt ->  assign_stmt"); $$ = stmt____assign_stmt($1); }
+                | return_stmt                                   {Debug("stmt ->  return_stmt"); $$ = stmt____return_stmt($1); }
                 | print_stmt                                    {Debug("stmt -> print_stmt"); $$ = stmt____print_stmt($1); }
                 | if_stmt                                       {Debug("stmt -> if_stmt"); $$ = stmt____if_stmt($1);}
                 | while_stmt                                    {Debug("stmt -> while_stmt"); $$=stmt____while_stmt($1);}
@@ -85,7 +85,7 @@ stmt            : assign_stmt                                   {Debug("stmt -> 
 assign_stmt     : IDENT ASSIGN expr SEMI                        {Debug("assign_stmt -> IDENT  ASSIGN  expr  SEMI");  $$ = assignstmt____IDENT_ASSIGN_expr_SEMI($1, $2, $3);}
                 ;
 
-return_stmt     : RETURN expr SEMI                              {Debug("return_stmt    ->  RETURN  expr  SEMI"); $$ = returnstmt____RETURN_expr_SEMI($1, $2); }
+return_stmt     : RETURN expr SEMI                              {Debug("return_stmt    ->  RETURN  expr  SEMI"); $$ = returnstmt____RETURN_expr_SEMI($2); }
                 ;
 
 local_decls     : local_decls  local_decl                       {Debug("local_decls    ->  local_decls  local_decl"); $$ = localdecls____localdecls_localdecl($1, $2);}
@@ -123,17 +123,17 @@ expr            : expr ADD expr                                 {Debug("expr -> 
 
 if_stmt         :  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt   {Debug("if_stmt        ->  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt"); $$ = if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt($3, $5, $7 ); };
 
-param_list      :  param_list  COMMA  param   {Debug("param_list     -> param_list  COMMA  param "); $$ = param_list____param_list_COMMA_param($1, $2, $3);}
+param_list      :  param_list  COMMA  param   {Debug("param_list     -> param_list  COMMA  param "); $$ = param_list____param_list_COMMA_param($1, $3);}
                 |  param                      {Debug("param_list     -> param"); $$ = param_list____param($1); };
 
-param          : VAR  type_spec  IDENT        {Debug("param          ->  VAR  type_spec  IDENT"); $$ = param____VAR_type_spec_IDENT($1, $2, $3); };
+param          : VAR  type_spec  IDENT        {Debug("param          ->  VAR  type_spec  IDENT"); $$ = param____VAR_type_spec_IDENT($2, $3); };
 
 arg_list       :  arg_list  COMMA  expr       {Debug("arg_list       ->  arg_list  COMMA  expr"); $$ =arg_list____arg_list_COMMA_expr($1, $3); }
                |  expr                  {Debug("arg_list       ->       expr"); $$ = arg_list____expr($1);};
 
 print_stmt     : PRINT  expr  SEMI      {Debug("print_stmt     ->  PRINT  expr  SEMI"); $$ = print_stmt____PRINT_expr_SEMI($2); };
 
-while_stmt     : WHILE  LPAREN  expr  RPAREN  stmt {Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); while_stmt____WHILE_LPAREN_expr_RPAREN_stmt($3, $5);};
+while_stmt     : WHILE  LPAREN  expr  RPAREN  stmt {Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); $$ = while_stmt____WHILE_LPAREN_expr_RPAREN_stmt($3, $5);};
 
 compound_stmt: BEGIN local_decls stmt_list END      {Debug("compound_stmt  ->  BEGIN  local_decls  stmt_list  END"); $$ = compound_stmt____BEGIN_localDecls_stmtList_END($2, $3);} ;
 

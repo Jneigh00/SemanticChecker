@@ -8,15 +8,16 @@ public class ParseTreeInfo
     // You should not modify ParseTree.java
     public static class TypeSpecInfo
     {
+        ArrayList<ParseTree.Param> params;
     }
     public static class ProgramInfo
     {
     }
     public static class FuncDeclInfo
     {
-        String name;
-        ParseTree.TypeSpec returnType;
-        ArrayList<ParseTree.Param> params;
+        public String name;
+        public ParseTree.TypeSpec returnType;
+        public ArrayList<ParseTree.Param> params;
     }
     public static class ParamInfo
     {
