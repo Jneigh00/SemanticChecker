@@ -8,9 +8,10 @@ public class ParseTreeInfo
     // You should not modify ParseTree.java
     public static class TypeSpecInfo
     {
-        ArrayList<ParseTree.Param> params;
+        public ArrayList<ParseTree.Param> params;
         public String returnType;
         public String name;
+        public boolean isFunc = false;
     }
     public static class ProgramInfo
     {

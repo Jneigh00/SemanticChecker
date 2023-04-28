@@ -69,9 +69,7 @@ public class ParserImpl
         ParseTree.TypeSpec primtype = (ParseTree.TypeSpec)s1;
         return primtype;
     }
-    ParseTree.TypeSpec typespec___eps(Object s1){
-        return null;
-    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -83,24 +81,43 @@ public class ParserImpl
         ParseTree.TypeSpec retType = (ParseTree.TypeSpec) s7;
         ArrayList<ParseTree.Param> params = (ArrayList<ParseTree.Param>) s4;
         ArrayList<ParseTree.LocalDecl> localdecls = (ArrayList<ParseTree.LocalDecl>) s9;
+
+        if(env.Get(token.lexeme) != null){
+            throw new Exception("[Error at " + token.lineno + ":" + (token.column - 5) + "] The function " + token.lexeme + "() is already defined.");
+        }
+
         ParseTree.TypeSpec tempStore = new ParseTree.TypeSpec(token.lexeme);
-        tempStore.info.params = params;
-        tempStore.info.name = token.lexeme;
-        tempStore.info.returnType = retType.typename;
-        env.Put(name, tempStore);
+        retType.info = new ParseTreeInfo.TypeSpecInfo();
+        retType.info.params = params;
+        retType.info.name = token.lexeme;
+        retType.info.returnType = retType.typename;
+        retType.info.isFunc = true;
+        env.Put(token.lexeme, retType);
 
         // 2. create a new symbol table on top of env
         env = new Env(env);
         // 3. add parameters into top-local scope of env
         for(int i = 0; i < params.size(); i++){
             ParseTree.TypeSpec temp = new ParseTree.TypeSpec( params.get(i).typespec.typename);
-            env.Put(params.get(i).ident, temp);
+            ParseTree.Param param = params.get(i);
+            param.typespec.info.isFunc = false;
+            env.Put(param.ident, param.typespec);
+        }
+        for(int i = 0; i < localdecls.size(); i++){
+            ParseTree.TypeSpec temp = new ParseTree.TypeSpec( localdecls.get(i).typespec.typename);
+            if(env.Get(localdecls.get(i).ident) != null && ((ParseTree.TypeSpec) env.Get(localdecls.get(i).ident)).info.isFunc == false){
+                throw new Exception("[Error at " + token.lineno + ":" + token.column + "] The identifier " + localdecls.get(i).ident +" is already defined. ");
+            }
+            ParseTree.LocalDecl localDecl = localdecls.get(i);
+            localDecl.typespec.info.isFunc = false;
+            env.Put(localDecl.ident, localDecl.typespec);
+
         }
         Object id_type = env.Get(token.lexeme);
 
         // 4. etc.
 
-        return null;
+       return null;
     }
     ParseTree.FuncDecl fundecl____FUNC_IDENT_LPAREN_params_RPAREN_FUNCRET_primtype_BEGIN_localdecls_X10_stmtlist_END(Object s2, Object s4, Object s7, Object s9, Object s11, Object s12) throws Exception
     {
@@ -114,8 +131,50 @@ public class ParserImpl
         ArrayList<ParseTree.Stmt>        stmtlist   = (ArrayList<ParseTree.Stmt>       )s11;
         Token                            end        = (Token                           )s12;
         ParseTree.FuncDecl funcdecl = new ParseTree.FuncDecl(id.lexeme, rettype, params, localdecls, stmtlist);
-        return funcdecl;
+        boolean noRetType = false;
         //Loop over stmtlist check if the stmt you are on is an instance of return statement, if it is, compare its type to the return type of the funciton
+        for(int i = 0; i<stmtlist.size(); i++){
+             ParseTree.Stmt curr = stmtlist.get(i);
+             if(curr instanceof ParseTree.ReturnStmt){
+                 noRetType = true;
+                 ParseTree.ReturnStmt retStmt = (ParseTree.ReturnStmt) curr;
+                 if(!(retStmt.expr.info.primType.equals(rettype.typename))){ //
+                     throw new Exception("[Error at " + id.lineno + ":" + id.column + "]  The type of returning value ("  +retStmt.expr.info.primType + ") should match with the return type (" + rettype.typename  +") of the function main().");
+                 }
+             }
+             else if(curr instanceof ParseTree.IfStmt){
+                 ParseTree.Stmt thenstmt =  ((ParseTree.IfStmt) curr).thenstmt;
+                 ParseTree.Stmt elsestmt =  ((ParseTree.IfStmt) curr).elsestmt;
+                 if( elsestmt instanceof ParseTree.ReturnStmt){ //
+                     noRetType = true;
+                     if(!((ParseTree.ReturnStmt) elsestmt).expr.info.primType.equals(rettype.typename)){
+                         throw new Exception("[Error at " + id.lineno + ":" + id.column + "]  The type of returning value ("  + ((ParseTree.ReturnStmt) elsestmt).expr.info.primType + ") should match with the return type (" + rettype.typename  +") of the function main().");
+                     }
+                 }
+                 else if(thenstmt instanceof ParseTree.ReturnStmt){
+                     noRetType = true;
+                     if(!((ParseTree.ReturnStmt) thenstmt).expr.info.primType.equals(rettype.typename)){
+                         throw new Exception("[Error at " + id.lineno + ":" + id.column + "]  The type of returning value ("  + ((ParseTree.ReturnStmt) thenstmt).expr.info.primType + ") should match with the return type (" + rettype.typename  +") of the function main().");
+                     }
+
+                 }
+             }
+             else if(curr instanceof ParseTree.WhileStmt){
+                 noRetType = true;
+                 ParseTree.Stmt whileStmt = ((ParseTree.WhileStmt) curr).stmt;
+                 if(whileStmt instanceof ParseTree.ReturnStmt){
+                     noRetType = true;
+                     if(!((ParseTree.ReturnStmt) whileStmt).expr.info.primType.equals(rettype.typename)){
+                         throw new Exception("[Error at " + id.lineno + ":" + id.column + "]  The type of returning value ("  + ((ParseTree.ReturnStmt) whileStmt).expr.info.primType + ") should match with the return type (" + rettype.typename  +") of the function main().");
+                     }
+                 }
+             }
+        }
+        if(noRetType == false){
+            throw new Exception("[Error at " + end.lineno + ":" + end.column + "] The function " + id.lexeme +"() should return at least one " + rettype.typename + " value." );
+        }
+        env = env.prev;
+       return funcdecl;
     }
     ArrayList<ParseTree.Param> params____param_list(Object s1){
         ArrayList<ParseTree.Param> params = (ArrayList<ParseTree.Param>) s1;
@@ -174,8 +233,12 @@ public class ParserImpl
         Token          id     = (Token         )s1;
         Token          assign = (Token         )s2;
         ParseTree.Expr expr   = (ParseTree.Expr)s3;
-        Object id_type = env.Get(id.lexeme).typename;
-        System.out.println(id_type);
+
+        if(env.Get(id.lexeme) == null){
+            throw new Exception("[Error at " + id.lineno + ":" + id.column + "] Cannot use an undefined variable " + id.lexeme );
+        }
+        String id_type = env.Get(id.lexeme).typename;
+
        if(expr.info.primType.equals("int") && id_type.equals("int")){
            ParseTree.AssignStmt stmt = new ParseTree.AssignStmt(id.lexeme, expr);
            stmt.ident_reladdr = 1;
@@ -186,7 +249,7 @@ public class ParserImpl
            stmt.ident_reladdr = 1;
            return stmt;
        }
-        throw new Exception("[Error at " + assign.lineno + ":" + assign.column + "] Cannot assign int value to bool variable " + id.lexeme + ".");
+        throw new Exception("[Error at " + assign.lineno + ":" + assign.column + "] Cannot assign " + expr.info.primType  + " value to " +  id_type  +" variable "  + id.lexeme + ".");
     }
     ParseTree.ReturnStmt returnstmt____RETURN_expr_SEMI(Object s2) throws Exception
     {
@@ -215,7 +278,6 @@ public class ParserImpl
         ParseTree.TypeSpec typespec = (ParseTree.TypeSpec)s2;
         Token              id       = (Token             )s3;
         ParseTree.LocalDecl localdecl = new ParseTree.LocalDecl(id.lexeme, typespec);
-        env.Put(id.lexeme, typespec);
         localdecl.reladdr = 1;
         return localdecl;
     }
@@ -238,7 +300,6 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr)s1;
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
-        System.out.println(expr1.info.name + " HERE");
         // check if expr1.type matches with expr2.type
         ParseTree.ExprAdd addExpr = new ParseTree.ExprAdd(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
@@ -271,8 +332,6 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr)s1;
         Token          oper  = (Token         )s2;
         ParseTree.Expr expr2 = (ParseTree.Expr)s3;
-        System.out.println("IN EQ " + expr1.info.primType);
-        System.out.println("IN EQ " + expr2.info.primType);
         // check if expr1.type matches with expr2.type
         ParseTree.ExprEq subExpr = new ParseTree.ExprEq(expr1,expr2);
         if((expr1.info.primType.equals("int")) && (expr2.info.primType.equals("int"))){
@@ -417,7 +476,6 @@ public class ParserImpl
         Token notToken = (Token) s1;
         ParseTree.Expr expr2 = (ParseTree.Expr) s2;
         ParseTree.ExprNot notExpr = new ParseTree.ExprNot(expr2);
-        System.out.println("HERE" + expr2.info.primType);
         if(expr2.info.primType.equals("int")){
             throw new Exception("[Error at " + notToken.lineno + ":" + notToken.column + "] Cannot perform not int.");
         }
@@ -442,9 +500,11 @@ public class ParserImpl
         // 3. etc.
         // 4. create and return node that has the value_type of the id.lexeme
         Token id = (Token)s1;
-
         if(env.Get(id.lexeme) == null){
                 throw new Exception("[Error at " + id.lineno + ":" + id.column + "] Cannot use and undefined variable " + id.lexeme + ".");
+        }
+        if(env.Get(id.lexeme).info.isFunc){
+            throw new Exception("[Error at " + id.lineno + ":" + id.column + "] Cannot use the function " + id.lexeme + "() as a variable.");
         }
         ParseTree.ExprIdent expr = new ParseTree.ExprIdent(id.lexeme);
         expr.info = new ParseTreeInfo.ExprInfo();
@@ -480,34 +540,59 @@ public class ParserImpl
         // 5. create and return node that has the value_type of env(id.lexeme).return_type
         Token                    id   = (Token                   )s2;
         ArrayList<ParseTree.Arg> args = (ArrayList<ParseTree.Arg>)s4;
-        Object func_attr = env.Get(id.lexeme);
-        System.out.println(id.lexeme);
-        System.out.println(env.Get(id.lexeme).info.name);
-        if(env.Get(id.lexeme) != null){
-            ParseTree.TypeSpec pulled = env.Get(id.lexeme);
-            if(pulled.typename.equals("Func")){
-                int paramsSize = pulled.info.params.size();
-                int argsSize = args.size();
-                if(paramsSize == argsSize){
-                    for(int i = 0; i<argsSize; i++){
-                        if(!(args.get(i).expr.info.primType.equals(pulled.info.params.get(i).typespec.typename))){
-                            throw new Exception("Argument type does not match Parameter type");
-                        }
-                    }
-                }
-                else{
-                    throw new Exception("Number of arguments in function does not match the number of arguments in function call");
+        ParseTree.TypeSpec func_attr = env.Get(id.lexeme);
+
+        if(env.Get(id.lexeme) == null){
+            throw new Exception("[Error at " + id.lineno + ":" + (id.column - id.lexeme.length() -1) + "] Cannot use an undefined function " + id.lexeme + "()");
+        }
+
+
+        ParseTree.TypeSpec pulled = env.Get(id.lexeme);
+        if(pulled.info.params == null){
+            if(func_attr.info.isFunc == false){
+                throw new Exception("[Error at " + id.lineno + ":" + (id.column - id.lexeme.length() -1) + "] Cannot use the function " + id.lexeme + "()  as a variable.");
+            }
+        }
+        else{
+            int paramsSize = pulled.info.params.size();
+            int argsSize = args.size();
+
+            if(paramsSize != argsSize){
+                throw new Exception("[Error at " + id.lineno + ":" + (id.column - id.lexeme.length() -1) + "] Cannot pass the incorrect number of arguments to " + id.lexeme + "()");
+            }
+
+            for(int i = 0; i < argsSize; i++){
+                ParseTree.Arg currArg = args.get(i);
+                ParseTree.Param currParam = pulled.info.params.get(i);
+                if(!currArg.expr.info.primType.equals(currParam.typespec.typename)){
+                    String printNum = "";
+                    if(i == 0)
+                        printNum = "1st";
+                    else if(i == 1)
+                        printNum = "2nd";
+                    else if(i == 2)
+                        printNum = "3rd";
+                    else
+                        printNum = i + "th";
+                    throw new Exception("[Error at " + id.lineno + ":" + (id.column - id.lexeme.length() - 1) + "] The "+ printNum + " argument of the function " + id.lexeme + "() should be " + currParam.typespec.typename + " type." );
                 }
             }
         }
-        ParseTree.ExprCall call = new ParseTree.ExprCall(env.Get(id.lexeme).typename, args);
+
+
+        ParseTree.ExprCall call = new ParseTree.ExprCall(env.Get(id.lexeme).info.name, args);
         call.info.primType = env.Get(id.lexeme).info.returnType;
+        call.info.name = env.Get(id.lexeme).info.name;
         return call;
     }
 
 
-    ParseTree.IfStmt if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt(Object s3, Object s5, Object s7) throws Exception{
+    ParseTree.IfStmt if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt(Object s2,Object s3, Object s5, Object s7) throws Exception{
         ParseTree.Expr cond = (ParseTree.Expr) s3;
+        Token notToken = (Token) s2;
+        if(!cond.info.primType.equals("bool")){
+            throw new Exception("[Error at " + notToken.lineno + ":" + (notToken.column + 2) + "] Cannot perform not int.");
+        }
         ParseTree.Stmt thenStmt = (ParseTree.Stmt) s5;
         ParseTree.Stmt elseStmt = (ParseTree.Stmt) s7;
         return new ParseTree.IfStmt(cond, thenStmt, elseStmt);
@@ -551,21 +636,38 @@ public class ParserImpl
         ParseTree.Expr expr1 = (ParseTree.Expr) s1;
         return new ParseTree.PrintStmt(expr1);
     }
-    ParseTree.WhileStmt while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(Object s3, Object s5) throws Exception{
+    ParseTree.WhileStmt while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(Object s3, Object s4, Object s5) throws Exception{
         ParseTree.Expr expr1 = (ParseTree.Expr) s3;
         ParseTree.Stmt stmt1 = (ParseTree.Stmt) s5;
+        Token notToken = (Token) s4;
+        if(!expr1.info.primType.equals("bool")){
+            throw new Exception("[Error at " + notToken.lineno + ":" + (notToken.column - notToken.lexeme.length() -2) + "] Cannot perform not int.");
+        }
         return new ParseTree.WhileStmt(expr1, stmt1);
     }
     ParseTree.CompoundStmt compound_stmt____BEGIN_localDecls_stmtList_End(Object s1 ,Object s2){
+        ArrayList<ParseTree.LocalDecl> localDecls = (ArrayList<ParseTree.LocalDecl>)s2;
+
         env = new Env(env);
 
+        for(int i = 0; i < localDecls.size(); i++){
+            ParseTree.LocalDecl temp = localDecls.get(i);
+            temp.typespec.info.isFunc = false;
+            env.Put(temp.ident, temp.typespec);
+        }
 
         return null;
     }
 
-    ParseTree.CompoundStmt compound_stmt____BEGIN_localDecls_stmtList_End(Object s1 ,Object s2){
+    ParseTree.CompoundStmt compound_stmt____BEGIN_localDecls_stmtList_End(Object s1, Object s2, Object s3){
+        ArrayList<ParseTree.LocalDecl> localDecls = (ArrayList<ParseTree.LocalDecl>)s2;
+        ArrayList<ParseTree.Stmt> stmts = (ArrayList<ParseTree.Stmt>)s3;
 
-        return null;
+        ParseTree.CompoundStmt compoundStmt = new ParseTree.CompoundStmt(localDecls, stmts);
+        env = env.prev;
+
+        return compoundStmt;
     }
+
 
 }

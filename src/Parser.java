@@ -646,7 +646,7 @@ case 7:
 break;
 case 8:
 //#line 64 "Parser.y"
-{ Debug("fun_decl -> FUNC ID(params)->prim_type BEGIN local_decls"); yyval.obj = fundecl____FUNC_IDENT_LPAREN_params_RPAREN_FUNCRET_primtype_BEGIN_localdecls_10X_stmtlist_END(val_peek(7).obj, val_peek(5).obj, val_peek(2).obj, val_peek(0).obj          ); }
+{ Debug("fun_decl -> FUNC ID(params)->prim_type BEGIN local_decls"); yyval.obj = fundecl____FUNC_IDENT_LPAREN_params_RPAREN_FUNCRET_primtype_BEGIN_localdecls_10X_stmtlist_END(val_peek(7).obj, val_peek(5).obj, val_peek(2).obj, val_peek(0).obj ); }
 break;
 case 9:
 //#line 65 "Parser.y"
@@ -798,7 +798,7 @@ case 45:
 break;
 case 46:
 //#line 124 "Parser.y"
-{Debug("if_stmt        ->  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt"); yyval.obj = if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt(val_peek(4).obj, val_peek(2).obj, val_peek(0).obj ); }
+{Debug("if_stmt        ->  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt"); yyval.obj = if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt(val_peek(5).obj,val_peek(4).obj, val_peek(2).obj, val_peek(0).obj ); }
 break;
 case 47:
 //#line 126 "Parser.y"
@@ -826,15 +826,15 @@ case 52:
 break;
 case 53:
 //#line 136 "Parser.y"
-{Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); yyval.obj = while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(val_peek(2).obj, val_peek(0).obj);}
+{Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); yyval.obj = while_stmt____WHILE_LPAREN_expr_RPAREN_stmt(val_peek(2).obj, val_peek(1).obj ,val_peek(0).obj);}
 break;
 case 54:
 //#line 138 "Parser.y"
-{ yyval.obj = compound_stmt____BEGIN_localDecls_stmtList_End(val_peek(1).obj,val_peek(0).obj)}
+{ yyval.obj = compound_stmt____BEGIN_localDecls_stmtList_End(val_peek(1).obj,val_peek(0).obj);}
 break;
 case 55:
 //#line 139 "Parser.y"
-{Debug("compound_stmt  ->  BEGIN  local_decls  stmt_list  END"); yyval.obj = compound_stmt____BEGIN_localDecls_stmtList_End(val_peek(4).obj,val_peek(3).obj);}
+{Debug("compound_stmt  ->  BEGIN  local_decls  stmt_list  END"); yyval.obj = compound_stmt____BEGIN_localDecls_stmtList_End(val_peek(4).obj,val_peek(3).obj, val_peek(1).obj);}
 break;
 //#line 761 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########

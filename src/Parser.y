@@ -61,7 +61,7 @@ prim_type       : INT                                           {Debug("prim_typ
 type_spec       : prim_type                                     {Debug("type_spec -> prim_type"); $$ = typespec____primtype($1);}
                 ;
 
-fun_decl        : FUNC IDENT LPAREN params RPAREN FUNCRET prim_type BEGIN local_decls{ Debug("fun_decl -> FUNC ID(params)->prim_type BEGIN local_decls"); $<obj>$ = fundecl____FUNC_IDENT_LPAREN_params_RPAREN_FUNCRET_primtype_BEGIN_localdecls_10X_stmtlist_END($2, $4, $7, $9          ); }
+fun_decl        : FUNC IDENT LPAREN params RPAREN FUNCRET prim_type BEGIN local_decls{ Debug("fun_decl -> FUNC ID(params)->prim_type BEGIN local_decls"); $<obj>$ = fundecl____FUNC_IDENT_LPAREN_params_RPAREN_FUNCRET_primtype_BEGIN_localdecls_10X_stmtlist_END($2, $4, $7, $9 ); }
                                                                         stmt_list END{ Debug("                                           stmt_list END"); $$ =      fundecl____FUNC_IDENT_LPAREN_params_RPAREN_FUNCRET_primtype_BEGIN_localdecls_X10_stmtlist_END($2, $4, $7, $9, $11, $12); }
                 ;
 
@@ -121,7 +121,7 @@ expr            : expr ADD expr                                 {Debug("expr -> 
                 ;
 
 
-if_stmt         :  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt   {Debug("if_stmt        ->  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt"); $$ = if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt($3, $5, $7 ); };
+if_stmt         :  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt   {Debug("if_stmt        ->  IF  LPAREN  expr  RPAREN  stmt  ELSE  stmt"); $$ = if_stmt____IF_LPAREN_expr_RPAREN_stmt_ELSE_stmt($2,$3, $5, $7 ); };
 
 param_list      :  param_list  COMMA  param   {Debug("param_list     -> param_list  COMMA  param "); $$ = param_list____param_list_COMMA_param($1, $3);}
                 |  param                      {Debug("param_list     -> param"); $$ = param_list____param($1); };
@@ -133,10 +133,10 @@ arg_list       :  arg_list  COMMA  expr       {Debug("arg_list       ->  arg_lis
 
 print_stmt     : PRINT  expr  SEMI      {Debug("print_stmt     ->  PRINT  expr  SEMI"); $$ = print_stmt____PRINT_expr_SEMI($2); };
 
-while_stmt     : WHILE  LPAREN  expr  RPAREN  stmt {Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); $$ = while_stmt____WHILE_LPAREN_expr_RPAREN_stmt($3, $5);};
+while_stmt     : WHILE  LPAREN  expr  RPAREN  stmt {Debug("while_stmt     ->  WHILE  LPAREN  expr  RPAREN  stmt"); $$ = while_stmt____WHILE_LPAREN_expr_RPAREN_stmt($3, $4 ,$5);};
 
-compound_stmt: BEGIN local_decls    { $$ = compound_stmt____BEGIN_localDecls_stmtList_End($1,$2)}
-                stmt_list END       {Debug("compound_stmt  ->  BEGIN  local_decls  stmt_list  END"); $$ = compound_stmt____BEGIN_localDecls_stmtList_End($1,$2);}
+compound_stmt: BEGIN local_decls    { $<obj>$ = compound_stmt____BEGIN_localDecls_stmtList_End($1,$2);}
+                stmt_list END       {Debug("compound_stmt  ->  BEGIN  local_decls  stmt_list  END"); $$ = compound_stmt____BEGIN_localDecls_stmtList_End($1,$2, $4);}
                 ;
 
 %%
